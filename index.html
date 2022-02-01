@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Etch-a-Sketch</title>
+    <meta charset="UTF-8">
+    <style>
+      body {
+        background:darkgrey;
+      }
+
+      .wrapper {
+        display: grid;
+      }
+      .gridSquare {
+        background: orange;
+        aspect-ratio: 1; /* need to check compatibility */
+      }
+
+      .gridSquare.hover {
+        background: green;
+      }
+
+    </style>
+  </head>
+
+  <button id="reset">Create New Grid</button>
+  <div class="wrapper">
+
+  </div>
+
+
+
+  <script>
+    createGrid(16);
+    addGridResetListener();
+
+
+
+    // size = only ONE side dimension of a square grid
+    function createGrid(gridSize) {
+        const wrapper = document.querySelector(".wrapper");
+
+        // change the number of CSS grid columns to reflect size of grid
+        wrapper.style.gridTemplateColumns = "repeat( " + gridSize + ", 1fr)";
+
+        let numGridSquares = Math.pow(gridSize, 2);
+        const gridSquare = document.createElement("div");
+
+         for (let i=0; i < numGridSquares; i++) {
+            const gridSquare = document.createElement("div");
+            gridSquare.classList.add('gridSquare');
+            addMouseoverHoverListeners(gridSquare);
+            wrapper.appendChild(gridSquare);
+         }
+
+
+      }
+
+      // mouseover a grid square adds a hover class to the div
+      function addMouseoverHoverListeners(gridSquare) {
+        gridSquare.addEventListener('mouseover', ()=> {
+              gridSquare.classList.add('hover');
+            })
+      }
+
+      // clicking reset button deletes the grid, prompts the user for a new grid size, then generates the grid
+      function addGridResetListener() {
+        const resetButton = document.querySelector("#reset")
+        const wrapper = document.querySelector(".wrapper");
+
+        resetButton.addEventListener('click', ()=> {
+          while(wrapper.firstChild) {
+            wrapper.removeChild(wrapper.firstChild);
+          }
+
+          let gridSize;
+          while(!gridSize || gridSize>100 || gridSize<0){
+            gridSize = prompt("Please enter the new size of square grid");
+          }
+
+          createGrid(gridSize);
+
+
+        });
+
+
+      }
+
+
+  </script>
+</html>
