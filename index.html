@@ -5,19 +5,15 @@
     <meta charset="UTF-8">
     <style>
       body {
-        background:darkgrey;
+        background-color:black;
       }
 
       .wrapper {
         display: grid;
       }
       .gridSquare {
-        background: orange;
-        aspect-ratio: 1; /* need to check compatibility */
-      }
-
-      .gridSquare.hover {
-        background: green;
+        background-color:black;
+        aspect-ratio: 1; /* need to check compatibility, this makes all divs a square */
       }
 
     </style>
@@ -35,7 +31,6 @@
     addGridResetListener();
 
 
-
     // size = only ONE side dimension of a square grid
     function createGrid(gridSize) {
         const wrapper = document.querySelector(".wrapper");
@@ -44,23 +39,47 @@
         wrapper.style.gridTemplateColumns = "repeat( " + gridSize + ", 1fr)";
 
         let numGridSquares = Math.pow(gridSize, 2);
-        const gridSquare = document.createElement("div");
 
          for (let i=0; i < numGridSquares; i++) {
             const gridSquare = document.createElement("div");
+            // gridSquare.style.backgroundColor = "orange";
             gridSquare.classList.add('gridSquare');
+
             addMouseoverHoverListeners(gridSquare);
+
             wrapper.appendChild(gridSquare);
          }
 
 
-      }
+        }
 
       // mouseover a grid square adds a hover class to the div
       function addMouseoverHoverListeners(gridSquare) {
         gridSquare.addEventListener('mouseover', ()=> {
-              gridSquare.classList.add('hover');
+              gridSquare.style.backgroundColor = randomRBGValue_CSS();
+              
+              // gradually dim square by 10% each time a mouseover happens, until the square it totally black
+              if(!gridSquare.style.opacity) {
+                gridSquare.style.opacity = 0.9;
+              } 
+              else if (gridSquare.style.opacity > 0) {
+                gridSquare.style.opacity = gridSquare.style.opacity - 0.1;
+              }
+              
+              
             })
+      }
+
+      // generate a random RBG value in the CSS format
+      function randomRBGValue_CSS() {
+        const max = 256;
+
+        const R = Math.floor(Math.random() * max);
+        const G = Math.floor(Math.random() * max);
+        const B = Math.floor(Math.random() * max);
+
+        return "rgb(" + R + ", " + G + ", " + B + ")";
+
       }
 
       // clicking reset button deletes the grid, prompts the user for a new grid size, then generates the grid
